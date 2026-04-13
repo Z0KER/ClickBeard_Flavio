@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  CLIENT
+  ADMIN
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CANCELED
+}
+
+model User {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  role         Role          @default(CLIENT)
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("users")
+}
+
+model Barber {
+  id               String             @id @default(uuid())
+  name             String
+  age              Int
+  hireDate         DateTime
+  specialties      BarberSpecialty[]
+  appointments     Appointment[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@map("barbers")
+}
+
+model Specialty {
+  id               String             @id @default(uuid())
+  name             String             @unique
+  barbers          BarberSpecialty[]
+  appointments     Appointment[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@map("specialties")
+}
+
+model BarberSpecialty {
+  barberId    String
+  specialtyId String
+  barber      Barber    @relation(fields: [barberId], references: [id], onDelete: Cascade)
+  specialty   Specialty @relation(fields: [specialtyId], references: [id], onDelete: Cascade)
+
+  @@id([barberId, specialtyId])
+  @@map("barber_specialties")
+}
+
+model Appointment {
+  id          String            @id @default(uuid())
+  clientId    String
+  barberId    String
+  specialtyId String
+  startTime   DateTime
+  endTime     DateTime
+  status      AppointmentStatus @default(SCHEDULED)
+  
+  client      User      @relation(fields: [clientId], references: [id])
+  barber      Barber    @relation(fields: [barberId], references: [id])
+  specialty   Specialty @relation(fields: [specialtyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([barberId, startTime])
+  @@map("appointments")
+}

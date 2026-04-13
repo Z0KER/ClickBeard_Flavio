@@ -1,0 +1,228 @@
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-color);
+}
+
+.header {
+    padding: 20px 40px;
+    background: var(--panel-color);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.header button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.header button:hover {
+    color: var(--primary-color);
+}
+
+.steps {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.content {
+    flex: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    width: 100%;
+}
+
+.stepContainer {
+    animation: slideIn 0.4s ease-out;
+}
+
+.stepContainer h2 {
+    font-size: 1.5rem;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.selectionGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.item {
+    background: var(--panel-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    transition: var(--transition);
+}
+
+.item svg {
+    color: var(--primary-color);
+    width: 32px;
+    height: 32px;
+}
+
+.item span {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.item:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-4px);
+    background: rgba(197, 160, 89, 0.05);
+}
+
+.selected {
+    border-color: var(--primary-color);
+    background: rgba(197, 160, 89, 0.1);
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.timeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.timeItem {
+    background: var(--panel-color);
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: var(--transition);
+}
+
+.timeItem:hover:not(:disabled) {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.timeItem:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.05);
+    text-decoration: line-through;
+}
+
+.timeSelected {
+    background: var(--primary-color);
+    color: #000;
+    border-color: var(--primary-color);
+}
+
+.dayInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.dayName {
+    font-size: 0.9rem;
+    text-transform: capitalize;
+    color: var(--text-muted);
+}
+
+.selected .dayName {
+    color: #000;
+}
+
+.dayDate {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.occupied {
+    background: rgba(255, 0, 0, 0.05) !important;
+}
+
+.occupiedLabel {
+    font-size: 0.7rem;
+    color: #ff4444;
+    font-weight: 600;
+}
+
+.finishBtn {
+    width: 100%;
+    margin-top: 40px;
+    background: var(--primary-color);
+    color: #000;
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: var(--transition);
+}
+
+.finishBtn:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(197, 160, 89, 0.3);
+}
+
+.finishBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.error {
+    color: var(--error-color);
+    background: rgba(255, 77, 77, 0.1);
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .header {
+        padding: 15px 20px;
+    }
+    .selectionGrid {
+        grid-template-columns: 1fr;
+    }
+}
