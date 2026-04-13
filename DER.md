@@ -1,63 +1,83 @@
 # Diagrama Entidade-Relacionamento (DER) - ClickBeard
 
-Este documento descreve a estrutura do banco de dados e os relacionamentos entre as entidades do sistema.
+Este documento descreve a estrutura do banco de dados e os relacionamentos entre as entidades do sistema, refletindo fielmente a implementação atual no Prisma.
 
 ```mermaid
 erDiagram
-    Barber ||--o{ BarberSpecialty : expert-in
-    Specialty ||--o{ BarberSpecialty : performed-by
-    User ||--o{ Appointment : schedules
-    Barber ||--o{ Appointment : serves
-    Specialty ||--o{ Appointment : includes
+    USER ||--o{ APPOINTMENT : "schedules"
+    BARBER ||--o{ APPOINTMENT : "serves"
+    SPECIALTY ||--o{ APPOINTMENT : "category"
+    BARBER ||--o{ BARBER_SPECIALTY : "has"
+    SPECIALTY ||--o{ BARBER_SPECIALTY : "taught_in"
 
-    User {
-        string id PK
+    USER {
+        string id PK "UUID"
         string name
-        string email
-        string role
+        string email UK
+        string passwordHash
+        Role role "Enum: CLIENT, ADMIN"
+        datetime createdAt
+        datetime updatedAt
     }
 
-    Barber {
-        string id PK
+    BARBER {
+        string id PK "UUID"
         string name
         int age
         datetime hireDate
+        datetime createdAt
+        datetime updatedAt
     }
 
-    Specialty {
-        string id PK
-        string name
+    SPECIALTY {
+        string id PK "UUID"
+        string name UK
+        datetime createdAt
+        datetime updatedAt
     }
 
-    BarberSpecialty {
-        string barberId FK
-        string specialtyId FK
+    BARBER_SPECIALTY {
+        string barberId PK, FK
+        string specialtyId PK, FK
     }
 
-    Appointment {
-        string id PK
+    APPOINTMENT {
+        string id PK "UUID"
         string clientId FK
         string barberId FK
         string specialtyId FK
-        datetime startTime
+        datetime startTime "Unique per Barber"
         datetime endTime
-        string status
+        AppointmentStatus status "Enum: SCHEDULED, CANCELED"
+        datetime createdAt
+        datetime updatedAt
     }
 ```
 
 ## Descrição das Entidades
 
 ### 1. User
-Armazena tanto os clientes quanto os administradores. A diferenciação é feita pelo campo `role`.
+Armazena tanto os clientes quanto os administradores. 
+- **`role`**: Controlado por um Enum (`CLIENT`, `ADMIN`).
+- **`passwordHash`**: Armazena a senha criptografada do usuário.
+- **`email`**: Possui restrição de unicidade (Unique Key).
 
 ### 2. Barber
-Os profissionais da barbearia. Cada barbeiro pode ter múltiplas especialidades.
+Os profissionais da barbearia. 
+- Cada barbeiro possui um conjunto de especialidades associadas via `BarberSpecialty`.
 
 ### 3. Specialty
-Os serviços oferecidos (ex: Corte, Barba, Sobrancelha).
+Os tipos de serviços oferecidos (Corte, Barba, etc).
+- O `name` é único para evitar duplicidade de categorias.
 
 ### 4. BarberSpecialty
 Tabela de ligação (Many-to-Many) que define quais serviços cada barbeiro está apto a realizar.
+- Implementada com uma chave primária composta (`barberId` + `specialtyId`).
 
 ### 5. Appointment
-A entidade central que une o **Cliente**, o **Barbeiro**, o **Serviço** e o **Horário**.
+Entidade central do agendamento.
+- **`status`**: Controlado por um Enum (`SCHEDULED`, `CANCELED`).
+- **Restrição de Horário**: O sistema garante que um mesmo barbeiro não possua mais de um agendamento no mesmo `startTime` (Unique Constraint).
+
+---
+*Nota: Todas as entidades possuem campos de auditoria `createdAt` e `updatedAt` gerenciados automaticamente pelo Prisma.*
