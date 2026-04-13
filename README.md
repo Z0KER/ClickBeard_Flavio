@@ -2,7 +2,7 @@
 
 Este projeto é uma aplicação fullstack moderna para gestão de agendamentos em uma barbearia premium. Focado em experiência do usuário (UX) e consistência de dados.
 
-## Tecnologias Utilizad
+## Tecnologias Utilizadas
 
 - **Frontend**: React (Vite), TypeScript, Zustand (Estado), Axios, Lucide React (Icons), Vanilla CSS.
 - **Backend**: Node.js (ESM), Express 5, TypeScript, Prisma ORM, JWT, Bcrypt, Zod v4.
