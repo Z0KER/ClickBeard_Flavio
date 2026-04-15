@@ -1,14 +1,7 @@
 import type { Request, Response } from 'express'
 import { z } from 'zod'
 import { prisma } from '../lib/prisma.js'
-import {
-    startOfToday,
-    isBefore,
-    addMinutes,
-    subHours,
-    startOfDay,
-    endOfDay,
-} from 'date-fns'
+import { startOfToday, isBefore, addMinutes, subHours } from 'date-fns'
 
 export class AppointmentController {
     private normalizeDate = (date: Date) => {
