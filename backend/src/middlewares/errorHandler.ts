@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
-import { ZodError } from 'zod'
+import { ZodError, z } from 'zod'
 
 export function errorHandler(
     err: Error,
@@ -10,7 +10,7 @@ export function errorHandler(
     if (err instanceof ZodError) {
         return res.status(400).json({
             message: 'Validation error.',
-            issues: err.format(),
+            errors: z.flattenError(err).fieldErrors,
         })
     }
 
