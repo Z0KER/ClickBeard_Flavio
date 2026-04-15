@@ -56,7 +56,7 @@ export class AuthController {
             return res.status(401).json({ message: 'Invalid credentials.' })
         }
 
-        const secret = process.env.JWT_SECRET || 'super-secret'
+        const secret = process.env.JWT_SECRET || ''
         const token = jwt.sign({ role: user.role }, secret, {
             subject: user.id,
             expiresIn: '1d',
