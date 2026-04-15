@@ -21,7 +21,7 @@ export function authMiddleware(
 
     try {
         if (!token) throw new Error()
-        const secret = process.env.JWT_SECRET || 'super-secret'
+        const secret = process.env.JWT_SECRET || ''
         const decoded = jwt.verify(token, secret) as unknown as TokenPayload
 
         req.user = {
